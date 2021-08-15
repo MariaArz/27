@@ -17,11 +17,11 @@ public:
 
     void  SetColor(std::string col){
         if (col=="rad") col=RAD;
-        if (col=="orange") col=ORANGE;
-        if (col=="yellow") col=YELLOW;
-        if (col=="green") col=GREEN;
-        if (col=="blue") col=BLUE;
-        if (col=="purple") col=PURPLE;
+        else if (col=="orange") col=ORANGE;
+        else if (col=="yellow") col=YELLOW;
+        else if (col=="green") col=GREEN;
+        else if (col=="blue") col=BLUE;
+        else if (col=="purple") col=PURPLE;
 
     }
     void input(float x, float y, float z, std::string col){
