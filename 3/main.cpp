@@ -7,90 +7,104 @@ enum {
     B=2,
     C=3
 };
-void type(int typeTask){
-    if (typeTask==A) std::cout<<"A"<<std::endl;
-    if (typeTask==B) std::cout<<"B"<<std::endl;
-    if (typeTask==C) std::cout<<"C"<<std::endl;
-}
-class Head{
+class Employ {
+    std::vector<int> employOne;
 public:
-    int task=0;
+    void type(int typeTask){
+        if (typeTask==A) {
+            employOne.push_back(A);
+            std::cout<<"A"<<std::endl;
+        }
+        if (typeTask==B) {
+            employOne.push_back(B);
+            std::cout<<"B"<<std::endl;
+        }
+        if (typeTask==C){
+            employOne.push_back(C);
+            std::cout<<"C"<<std::endl;
+        }
+    }
 };
-class Medium: public Head{
+
+
+class Medium: public Employ {
     std::vector<int> countEmployee;
 public:
-    int getSum(int n){
-        return task+n;
-    }
+
     void getCountEmployee(int employee){
          countEmployee.push_back(employee);
     }
     int getEmployee(int i){
         return countEmployee[i];
     }
-    int count=0;int n;
-    void distridution(int i,int countTask){
+    void distribution(int i,int countTask){
 
-        if (i == 0){
-            n=countTask;
-        }
-        else {
-            n=count;
-        }
-        if (countEmployee[i]<n) {
-            count=countEmployee[i];
-            n=abs(countEmployee[i]-n);
-            countEmployee[i]=0;
-        }
-        else {
-            count=n;
-            countEmployee[i]=countEmployee[i]-count;
-
-        }
-        std::cout<<"count of task "<< count <<std::endl;
+        std::cout<<"count of task "<< countTask <<std::endl;
         std::cout<<i<<" command"<<std::endl;
 
-        for (int j=0; j < count; j++){
-            if (i==countEmployee.size()-1 && count==countEmployee[i]){
+        for (int j=0; j < countTask; j++){
+            if (i==countEmployee.size()-1 && countEmployee[i] < countTask){
                 std::cout<<"Don't employees"<<std::endl;
                 break;
             }
             type(std::rand()%3+1);
         }
-        if (countEmployee[i]==0){
-            count=n;
-        }
-        else{
-            count=0;
-        }
+        countEmployee[i]=countEmployee[i]-countTask;
     }
-
-
 };
+class Head : public Medium{
+    int task=0;
+    int allEmployee=0;
+public:
+
+    void getAllEmployee(int x){
+        allEmployee+=x;
+    }
+    void getAllEmployeeDecrease(int x){
+         allEmployee-=x;
+    }
+    int getAEmp(){
+        return allEmployee;
+    }
+    int getTask(int t){
+        return task;
+    }
+    int getSum(int n){
+        return task+n;
+    }
+};
+
 int main() {
-    Medium* command= new Medium;
+    Head* command= new Head;
     int countCommand;
     std::cout<<"Input count of command"<<std::endl;
     std::cin>>countCommand;
-    int employee, allEmployee=0;
+    int countEmployees;
     for (int i=0; i < countCommand; i++){
         std::cout<<"count employees"<<std::endl;
-        std::cin>>employee;
-        command->getCountEmployee(employee);
-        allEmployee+=employee;
+        std::cin >> countEmployees;
+        command->getCountEmployee(countEmployees);
+        command->getAllEmployee(countEmployees);
     }
-    while (allEmployee>0){
+    int countTask=0;
+    while (command->getAEmp() > 0){
         std::cout<<"Input task"<<std::endl;
-        std::cin>>command->task;
-        int countTask;
+        int task;
+        std::cin>>task;
+        command->getTask(task);
+
         for (int i=0; i < countCommand; i++){
-            if(command->getEmployee(i)==0){
-                i++;
+            if(command->getEmployee(i) == 0){
+                //i++;
+                continue;
             }
             std::srand(command->getSum(i));
-            countTask=std::rand()%command->getEmployee(i)+1;
-            command->distridution(i,countTask);
+            countTask=std::rand()% command->getEmployee(i) + 1;
+            command->distribution(i,countTask);
+            command->getAllEmployeeDecrease(countTask);
         }
-        allEmployee=allEmployee-countTask;
+    }
+    if (command->getAEmp()==0){
+        std::cout<<"All employees are busy"<<std::endl;
     }
 }

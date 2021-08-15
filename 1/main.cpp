@@ -1,66 +1,84 @@
 #include <iostream>
 #include <vector>
-class Trees{
-    int bigdr = 0;
-    int littlebr=0;
-    std::vector<std::vector<std::string>> name;
-    std::vector<Trees*> country;
+
+class Branch{
+    int little=0;
+    std::vector<std::string> br;
 public:
-    std::vector<std::string> branch(){
+    int getLittle(){
+        return little;
+    }
+    Branch* setBranch(){
         std::string elf;
-        std::vector<std::string> bran;
-        littlebr = 2 + std::rand() % 2;
-        for (int k = 0; k < 1 + littlebr; k++) {
+        if (!br.empty()){
+            br.clear();
+        }
+        Branch* branch=new Branch;
+        branch->little=2 + std::rand() % 2+1;
+        for (int i=0; i < branch->little; i++){
             std::cout<<"Input elf"<<std::endl;
             std::cin >> elf;
             if (elf != "None") {
-                bran.push_back(elf);
+                branch->br.push_back(elf);
             }
         }
-        return bran;
+        return branch;
     }
-
-    Trees* getName() {
-        bigdr = 3 + std::rand() % 3;
-        for (int j = 0; j < bigdr; j++) {
-            this->name.push_back(this->branch());
+    std::vector<std::string> getBranch(){
+        return br;
+    }
+};
+class Trees{
+    Branch* branch=new Branch;
+    int big=0;
+    std::vector<Branch*> tr;
+public:
+    int getBig(){
+        return big;
+    }
+    Trees* setTrees(){
+        if (!tr.empty()){
+            tr.clear();
         }
-        return this;
+        Trees* trees=new Trees;
+        trees->big=3 + std::rand() % 2;
+        for (int i=0; i < trees->big; i++){
+            trees->tr.push_back(branch->setBranch());
+        }
+        return trees;
     }
-
-
-    std::vector<Trees*> countr(){
+    std::vector<Branch*> getTrees(){
+        return tr;
+    }
+};
+class Country{
+    Trees* trees=new Trees;
+    std::vector<Trees*> cou;
+public:
+    void setCountry(){
         for (int i=0; i < 5; i++){
-            country.push_back(this->getName());
+            cou.push_back(trees->setTrees());
         }
-        return country;
     }
-    void searchNeighborsinTree(std::string elf) {
-        for (int k=0; k<5; k++){
-            int t=0, n=country[k]->bigdr;
-            if ( k > 0){
-                t=country[k-1]->bigdr;
-                n=country[k-1]->bigdr+country[k]->bigdr;
-            }
-            for (int j=t; j < n; j++) {
-                for (int i=0; i < 1+country[k]->littlebr; i++){
-                    if (elf==country[k]->name[j][i]){
-                        std::cout<<country[k]->littlebr<<"neighbors"<<std::endl;
+    void search(std::string name){
+        for (int i=0; i < 5; i++){
+            for (int j=0; j < cou[i]->getBig(); j++){
+                for (int k=0; k < cou[i]->getTrees()[j]->getLittle(); k++){
+                    if (name==cou[i]->getTrees()[j]->getBranch()[k]){
+                        std::cout<<cou[i]->getTrees()[j]->getLittle()-1<<" neighbors"<<std::endl;
                         break;
                     }
                 }
-
             }
         }
-
     }
 };
-
 int main() {
-    Trees* trees=new Trees;
-    trees->countr();
-    std::string elf;
+    Country* country=new Country;
+    country->setCountry();
+    std::string elfSearch;
     std::cout<<"Input elf who need"<<std::endl;
-    std::cin >> elf;
-    trees->searchNeighborsinTree(elf);
+    std::cin>>elfSearch;
+    country->search(elfSearch);
+    return 0;
 }

@@ -15,7 +15,7 @@ class Figure{
     float xCenter, yCenter, zCenter;
 public:
 
-    void  colo(std::string col){
+    void  SetColor(std::string col){
         if (col=="rad") col=RAD;
         if (col=="orange") col=ORANGE;
         if (col=="yellow") col=YELLOW;
@@ -32,7 +32,7 @@ public:
     float  Space(float s){
         return  s;
     }
-    void Zone(float a, float  b, float  c){
+    void Zone(float a, float  b, float  c=0){
 
         float xMax=xCenter+a/2;
         float yMax=yCenter+c/2;
@@ -47,26 +47,26 @@ public:
 class Circle: public Figure{
 
 public:
-    float s(float r){
+    float space(float r){
         return r*r*3.14;
     }
 };
 class Square: public Figure{
 public:
-    float S(float a){
+    float space(float a){
         return a*a;
     }
 };
 class Triangle: public Figure{
 
 public:
-    float ST(float a){
+    float space(float a){
         return sqrt(a*a-a/2*a/2)*a/2;
     }
 };
 class Rectangle: public Figure{
 public:
-    float SpaceOfCover(float a, float  b){
+    float space(float a, float  b){
         return a*b;
     }
 
@@ -82,44 +82,44 @@ int main() {
         Circle* circle=new Circle;
         std::cout<<"Coordinate of center and color"<<std::endl;
         std::cin>>x>>y>>z>>col;
-        circle->colo(col);
+        circle->SetColor(col);
         circle->input(x,y,z, col);
         std::cin>>r;
-        std::cout<<"\nS="<<circle->Space(circle->s(r))<<std::endl;
-        circle->Zone(r,r,0);
+        std::cout << "\nS=" << circle->Space(circle->space(r)) << std::endl;
+        circle->Zone(r,r);
     }
     else if (command=="square"){
         float a;
         Square* square=new Square;
         std::cout<<"Coordinate of center and color"<<std::endl;
         std::cin>>x>>y>>z>>col;
-        square->colo(col);
+        square->SetColor(col);
         square->input(x,y,z,col);
         std::cin>>a;
-        std::cout<<"\nS="<<square->Space(square->S(a))<<std::endl;
-        square->Zone(a/2,a/2,0);
+        std::cout << "\nS=" << square->Space(square->space(a)) << std::endl;
+        square->Zone(a/2,a/2);
     }
     else if (command=="triangle"){
         float a;
         Triangle* triangle=new Triangle;
         std::cout<<"Coordinate of center and color"<<std::endl;
         std::cin>>x>>y>>z>>col;
-        triangle->colo(col);
+        triangle->SetColor(col);
         triangle->input(x,y,z,col);
         std::cin>>a;
-        std::cout<<"\nS="<<triangle->Space(triangle->ST(a))<<std::endl;
-        triangle->Zone(a/2,(sqrt(a*a-a/2*a/2)/2),0);
+        std::cout << "\nS=" << triangle->Space(triangle->space(a)) << std::endl;
+        triangle->Zone(a/2,(sqrt(a*a-a/2*a/2)/2));
     }
     else if (command=="rectangle"){
-        float a,b,c;
+        float a,b;
         Rectangle* rectangle=new Rectangle;
         std::cout<<"Coordinate of center and color"<<std::endl;
         std::cin>>x>>y>>z>>col;
-        rectangle->colo(col);
+        rectangle->SetColor(col);
         rectangle->input(x,y,z,col);
-        std::cin>>a>>b>>c;
-        std::cout<<"\nS="<<rectangle->Space(rectangle->SpaceOfCover(a,b,c))<<std::endl;
-        rectangle->Zone(a,b,c);
+        std::cin>>a>>b;
+        std::cout << "\nS=" << rectangle->Space(rectangle->space(a, b)) << std::endl;
+        rectangle->Zone(a,b);
     }
 
 }
